@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MQTT Web Demo</title>
+  <script src="https://cdn.jsdelivr.net/npm/mqtt/dist/mqtt.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #messages { margin-top: 20px; }
+    .message { padding: 5px; background-color: #f0f0f0; margin-bottom: 10px; }
+    #inputMessage { margin-top: 20px; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h1>MQTT Web Demo</h1>
+  <div>
+    <p>Messages received on the topic "test/topic":</p>
+    <div id="messages"></div>
+  </div>
+
+  <div>
+    <p>Write a message to publish:</p>
+    <input type="text" id="inputMessage" placeholder="Write a message..." />
+    <button onclick="publishMessage()">Publish Message</button>
+  </div>
+
+  <script>
+    const client = mqtt.connect('ws://localhost:9001');  // Connect to the MQTT broker
+
+    client.on('connect', function () {
+      console.log('Connected to the MQTT broker');
+      client.subscribe('test/topic', function (err) {
+        if (!err) {
+          console.log('Subscribed to the topic test/topic');
+        } else {
+          console.log('Error subscribing: ', err);
+        }
+      });
+    });
+
+    client.on('message', function (topic, message) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message');
+      messageDiv.textContent = `Topic: ${topic}, Message: ${message.toString()}`;
+      document.getElementById('messages').appendChild(messageDiv);
+    });
+
+    // Function to publish messages to the topic
+    function publishMessage() {
+      const message = document.getElementById('inputMessage').value;
+      if (message) {
+        client.publish('test/topic', message);
+        console.log(`Message published to test/topic: ${message}`);
+        document.getElementById('inputMessage').value = '';  // Clear the text field
+      } else {
+        alert("Please write a message before publishing.");
+      }
+    }
+  </script>
+</body>
+</html>
