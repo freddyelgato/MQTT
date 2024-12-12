@@ -1,4 +1,4 @@
-name: Build and Push Docker image for MQTT service
+name: Build and Push Docker image for SOAP service
 
 on:
   push:
@@ -25,4 +25,4 @@ jobs:
           context: .  
           file: ./Dockerfile 
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/mqtt-service:latest  # Corregido el formato del tag
+          tags: ${{ secrets.DOCKER_USERNAME }}/mqtt:latest  
