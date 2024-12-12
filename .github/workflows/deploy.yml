@@ -25,4 +25,4 @@ jobs:
           context: .  
           file: ./Dockerfile 
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/mqtt-service:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/mqtt-service:latest  # Corregido el formato del tag
